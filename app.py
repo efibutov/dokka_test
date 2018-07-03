@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import csv
 import json
 import requests
@@ -64,12 +65,13 @@ def get_addresses():
                 })
                 ret['links'] = links
             except Exception as e:
-                print 'Bad data:\n{}\n'.format(e)
+                LOGGER.info('Bad data:\n{}\n'.format(e))
 
         return json.dumps(ret)
     elif request.method == 'GET':
         return render_template('upload_form.html')
-    return 'Hello World!'
+    else:
+        return 'Unknown method in request:{}'.format(request.method)
 
 
 if __name__ == '__main__':
