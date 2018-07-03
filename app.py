@@ -4,7 +4,7 @@ import json
 import requests
 from flask import Flask, request, render_template
 from itertools import combinations
-from math import sqrt, cos, asin
+from math import sqrt, cos, asin, pi
 from logging import getLogger
 LOGGER = getLogger(__name__)
 
@@ -12,6 +12,7 @@ LOGGER = getLogger(__name__)
 MS_BING_MAPS_KEY = 'Aijo43UEi9YeOJ8V3-NfYwHf3V4THXfksacyugubXSwIC2ncRblRPG7_4oYYWetG'
 URL_TMPL = 'http://dev.virtualearth.net/REST/v1/Locations/{longitude},{latitude}?o=json&key={key}'
 R = 6.378e3  # Earth's radius
+C = pi / 180.0  # degrees to radian
 
 app = Flask(__name__)
 
@@ -30,9 +31,13 @@ def haversin(a):
 
 
 def get_distance(p_1, p_2):
-    teta_1, phi_1 = p_1[0], p_1[1]
-    teta_2, phi_2 = p_2[0], p_2[1]
-    dist = 2.0 * R * asin(sqrt(haversin(teta_1 - teta_2 + cos(teta_1) * cos(teta_2) * haversin(phi_1 - phi_2))))
+    teta_1, phi_1 = p_1[0] * C, p_1[1] * C
+    teta_2, phi_2 = p_2[0] * C, p_2[1] * C
+    dist = 2.0 * R * asin(
+        sqrt(
+            haversin(teta_1 - teta_2) + cos(teta_1) * cos(teta_2) * haversin(phi_1 - phi_2)
+        )
+    )
     return dist
 
 
