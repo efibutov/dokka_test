@@ -35,8 +35,8 @@ def get_distance(p_1, p_2):
     return dist
 
 
-@app.route('/', methods=['POST', 'GET'])
-def hello_world():
+@app.route('/get_addresses', methods=['POST', 'GET'])
+def get_addresses():
     if request.method == 'POST':
         ret = {'points': list()}
         original_data = dict()
