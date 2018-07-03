@@ -4,6 +4,8 @@ import requests
 from flask import Flask, request, render_template
 from itertools import combinations
 from math import sqrt, cos, asin
+from logging import getLogger
+LOGGER = getLogger(__name__)
 
 
 MS_BING_MAPS_KEY = 'Aijo43UEi9YeOJ8V3-NfYwHf3V4THXfksacyugubXSwIC2ncRblRPG7_4oYYWetG'
@@ -27,7 +29,6 @@ def haversin(a):
 
 
 def get_distance(p_1, p_2):
-    dist = 0.0
     teta_1, phi_1 = p_1[0], p_1[1]
     teta_2, phi_2 = p_2[0], p_2[1]
     dist = 2.0 * R * asin(sqrt(haversin(teta_1 - teta_2 + cos(teta_1) * cos(teta_2) * haversin(phi_1 - phi_2))))
@@ -41,10 +42,8 @@ def hello_world():
         original_data = dict()
         links = list()
         stream = iter(request.files['data'].stream)
-        next(stream)
 
         for line in csv.reader(stream):
-
             try:
                 point_name, longitude, latitude = line
                 original_data[point_name] = (float(longitude), float(latitude))
