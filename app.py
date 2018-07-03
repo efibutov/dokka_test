@@ -28,14 +28,9 @@ def haversin(a):
 
 def get_distance(p_1, p_2):
     dist = 0.0
-
-    try:
-        teta_1, phi_1 = float(p_1[0]), float(p_1[1])
-        teta_2, phi_2 = float(p_2[0]), float(p_2[1])
-        dist = 2.0 * R * asin(sqrt(haversin(teta_1 - teta_2 + cos(teta_1) * cos(teta_2) * haversin(phi_1 - phi_2))))
-    except:
-        pass
-
+    teta_1, phi_1 = p_1[0], p_1[1]
+    teta_2, phi_2 = p_2[0], p_2[1]
+    dist = 2.0 * R * asin(sqrt(haversin(teta_1 - teta_2 + cos(teta_1) * cos(teta_2) * haversin(phi_1 - phi_2))))
     return dist
 
 
@@ -62,12 +57,15 @@ def hello_world():
                 pass
 
         for point_1, point_2 in combinations(original_data, 2):
+            try:
 
-            links.append({
-                'name': point_1 + point_2,
-                'distance': get_distance(original_data[point_1], original_data[point_2])
-            })
-            ret['links'] = links
+                links.append({
+                    'name': point_1 + point_2,
+                    'distance': get_distance(original_data[point_1], original_data[point_2])
+                })
+                ret['links'] = links
+            except Exception as e:
+                print 'Bad data:\n{}\n'.format(e)
 
         return json.dumps(ret)
     elif request.method == 'GET':
